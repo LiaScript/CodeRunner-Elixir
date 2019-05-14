@@ -18,6 +18,7 @@ module.exports = (env, options) => ({
   entry: {
     '/editor/index':  './liascript/src/javascript/webcomponents/ace.js',
     '/formula/index': './liascript/src/javascript/webcomponents/katex.js',
+    'main': './js/main.js',
     'app': ['./js/app.js'].concat(glob.sync('./vendor/**/*.js'))
   },
   output: {
@@ -80,7 +81,7 @@ module.exports = (env, options) => ({
   },
   plugins: [
     new elmMinify.WebpackPlugin(),
-    new MiniCssExtractPlugin({ filename: '../css/app.css' }),
+    new MiniCssExtractPlugin({ filename: '../css/[name].css' }),
     new CopyWebpackPlugin([
       { from: 'static/', to: '../' },
       { from: 'liascript/src/assets/logo.png', to: '../images' },

@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+
 <div id="lia" style="height: calc(100% - 56px);"></div>
 
 <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/course/formula/katex.min.css") %>">

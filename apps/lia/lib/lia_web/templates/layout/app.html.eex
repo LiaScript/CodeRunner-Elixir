@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Lia · Berlin</title>
 
-    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
-
     <!-- Fonts -->
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/material.css") %>">
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/roboto.css") %>">
@@ -17,6 +15,8 @@
     <!-- Favicons -->
     <link href="<%= Routes.static_path(@conn, "/images/logo.png") %>" rel="apple-touch-icon">
     <link href="<%= Routes.static_path(@conn, "/images/logo.png") %>" rel="icon" type="image/png">
+
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
 
     <style>
     .lds-dual-ring {

@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/main.css") %>"/>
+
 <!-- Navigation -->
 <nav class="navbar navbar-light bg-light static-top">
   <div class="container">
