@@ -1,29 +1,12 @@
-defmodule LiaWeb.ParticipationChannel do
+defmodule LiaWeb.LiaChannel do
   use LiaWeb, :channel
 
   require Logger
 
-  def join("party:" <> party_id, _data, socket) do
-    party = Teaching.get_participation!(party_id)
+  def join("lia:" <> _party_id, _data, socket) do
+    Logger.info("new login")
 
-    if socket.assigns.user_id == party.user_id || socket.assigns.tutor do
-      logger =
-        if socket.assigns.user_id == party.user_id do
-          Log.bag(party_id, "join", "")
-          fn t, msg -> Log.bag(party_id, t, msg) end
-        else
-          fn _t, _msg -> nil end
-        end
-
-      {:ok, Account.get_user_preferences(socket.assigns.user_id),
-       socket
-       |> assign(:party_id, party_id)
-       |> assign(:active, party.course.active)
-       |> assign(:event_pid, %{})
-       |> assign(:log, logger)}
-    else
-      {:error, %{reason: "unauthorized"}}
-    end
+    {:ok, nil, socket}
   end
 
   def join("party:" <> _private_room_id, _socket) do

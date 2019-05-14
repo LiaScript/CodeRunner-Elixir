@@ -70,7 +70,6 @@ module.exports = (env, options) => ({
         use: {
           loader: 'elm-webpack-loader?verbose=true',
           options: {
-            forceWatch: true,
             cwd: elmSource,
             //debug: true,
             optimize: true,
@@ -84,8 +83,6 @@ module.exports = (env, options) => ({
     new MiniCssExtractPlugin({ filename: '../css/app.css' }),
     new CopyWebpackPlugin([
       { from: 'static/', to: '../' },
-//      { from: 'liascript/', to: '../course/' },
-//      { from: 'liascript/css/', to: '../css/' },
       { from: 'liascript/src/assets/logo.png', to: '../images' },
       { from: 'node_modules/katex/dist/katex.min.css', to: '../course/formula' },
       { from: 'node_modules/ace-builds/src-min-noconflict/', to: '../course/editor' },

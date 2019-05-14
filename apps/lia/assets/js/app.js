@@ -34,7 +34,7 @@ if(document.getElementById("lia")) {
       "",
       0,
       true,
-      socket);
+      socket.channel("lia:"+"2222"));
 } else {
     var app = null;
 }
