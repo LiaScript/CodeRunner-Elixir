@@ -110,6 +110,9 @@ defmodule CodeRunner.Agent do
       ["python" | args] ->
         Comp.Python.compile(args, config.path)
 
+      ["mono" | args] ->
+        Comp.Mono.compile(args, config.path)
+
       ["newbie" | args] ->
         Comp.Newbie.compile(args, config.path)
 
