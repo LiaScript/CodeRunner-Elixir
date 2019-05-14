@@ -1,0 +1,3 @@
+[submodule "apps/lia/assets/liascript"]
+	path = apps/lia/assets/liascript
+	url = https://gitlab.com/freinet/liascript.git

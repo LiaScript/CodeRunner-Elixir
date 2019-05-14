@@ -1,0 +1,255 @@
+<!-- Navigation -->
+<nav class="navbar navbar-light bg-light static-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">LiaScript</a>
+    <!--a class="btn btn-primary" href="#">Sign In</a-->
+  </div>
+</nav>
+
+<!-- Masthead -->
+<header class="masthead text-white text-center" id="Loader" style="background: url('images/bg-masthead.jpg') no-repeat center center;">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-9 mx-auto">
+        <h1 class="mb-5">Share your knowledge and build online courses with simple Markdown!</h1>
+      </div>
+      <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+        <form>
+          <div class="form-row">
+            <div class="col-12 col-md-9 mb-2 mb-md-0">
+              <input type="url" class="form-control form-control-lg" placeholder="Enter your course url ..." id="course_url1">
+            </div>
+            <div class="col-12 col-md-3">
+              <button class="btn btn-block btn-lg btn-primary" onclick="location.href = 'course/?'+document.getElementById('course_url1').value; return false;">Load</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Icons Grid -->
+<section class="features-icons bg-light text-center">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-2">
+          <div class="features-icons-icon d-flex">
+            <i class="fas fa-hat-wizard m-auto text-primary"></i>
+          </div>
+          <h3>No Tooling</h3>
+          <p class="lead mb-0">You only need a browser or at least a text-editor, that's it ...</p>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-2">
+          <div class="features-icons-icon d-flex">
+            <i class="fab fa-github-square m-auto text-primary"></i>
+          </div>
+          <h3>Open-Source</h3>
+          <p class="lead mb-0">Create, adapt, translate, and share courses on github ...</p>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+          <div class="features-icons-icon d-flex">
+            <i class="fab fa-js-square m-auto text-primary"></i>
+          </div>
+          <h3>JavaScript Ready</h3>
+          <p class="lead mb-0">Extend your course with any available JavaScript library!</p>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+          <div class="features-icons-icon d-flex">
+            <i class="fas fa-atom m-auto text-primary"></i>
+          </div>
+          <h3>Atom.io</h3>
+          <p class="lead mb-0">Write faster, easier, and better courses with Atom.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Image Showcases -->
+<section class="showcase" id="Concept">
+  <div class="container-fluid p-0">
+    <div class="row">
+      <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('images/bg-showcase-1.jpg'); background-position: center;"></div>
+      <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+        <h2>No Tooling (no programming)</h2>
+        <p class="lead mb-0">
+          Your course is parsed and rendered in real-time within the browser
+          at client-side. You only have to provide the URL to your course
+          file. A course is a simple Markdown format with support for
+          multimedia content, narrators, effect, quizzes, online programming,
+          ASCII-art diagrams, etc.
+          <br><br>
+          See the documentation
+          <a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/liaScript/docs/master/README.md#1">here</a>
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 text-white showcase-img" style="background-image: url('images/bg-showcase-2.jpg'); background-position: center;"></div>
+      <div class="col-lg-6 my-auto showcase-text">
+        <h2>Open-Source</h2>
+        <p class="lead mb-0">
+          You are the owner of your content, but by hosting your course on
+          github you give others the chance to contribute to, to translate,
+          to adapt to your course.
+          <br>
+          There is no single source of truth, so why should there be only
+          one course. With the help of git branches and forks it may be
+          possible to develop course for different students and target
+          audiences.
+          <br><br>
+          See a list of courses
+          <a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/liaScript/index/master/README.md#1">here</a>
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('images/canvas.png'); background-position: center;"></div>
+      <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+        <h2>JavaScript Ready</h2>
+        <p class="lead mb-0">
+          In contrast to other Markdown-parsers you are free to use any
+          JavaScript library you want. This way you can integrate any kind
+          of visualization, simulation, computer-algebra-system, or whatever
+          you might think is useful for your course.
+          <br>
+          To simplify the usage of JavaScript and HTML elements, LiaScript
+          provides a macro-system to cover repetitive tasks.
+          <br><br>
+          See a list of templates
+          <a href="https://liascript.github.io/course/?https://raw.githubusercontent.com/liaScript/templates/master/README.md#1">here</a>
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 text-white showcase-img" style="background-image: url('images/atom.jpg');"></div>
+      <div class="col-lg-6 my-auto showcase-text">
+        <h2>Atom.io</h2>
+        <p class="lead mb-0">
+          Finally I was able to release the first two LiaScript plugins for
+          <a href="https://atom.io">Atom</a>. I hope it will make course
+          development much simpler and faster in the the future...
+          <br>
+          <br>
+          <b><a href="https://atom.io/packages/liascript-preview">liascript-preview</a></b>:
+          Is a tiny previewer that, if it was toggled, updates the view on
+          your course each time you save your document.
+          <br>
+          <br>
+          <b><a href="https://atom.io/packages/liascript-snippets">liascript-snippets</a></b>:
+          If you start typing "lia" in your document you switch on a fuzzy
+          search, that contains a lot of LiaScript help, examples, and snippets.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials bg-light">
+  <div class="container" id="About">
+    <h2 class="mb-5 text-center">About</h2>
+    <div class="row">
+      <div class="col-lg-15 showcase-text">
+        <p class="lead mb-0">
+          I am a huge fan of online-courses (MOOCs), tutorials,
+          YouTube-courses, podcasts, etc., BUT ... MOOCs are not in the
+          public domain (although they should be), produced expensively by
+          publishers, which are interested in user numbers and therefore
+          only produce general courses for a large English speaking
+          audience. Video and audio recordings are also hard to produce,
+          they are “static” and one mistake or a missing fact cannot be
+          fixed that easy.
+        </p>
+        <p class="lead mb-0">
+          That is why I started to develop LiaScript, as a simple and
+          extendable Markdown-dialect that allows sharing knowledge by
+          creating interactive courses in an Open-Source manner, where
+          anyone can participate and contribute. Even if it is a course for
+          a minor audience, such as teaching cuneiform writing to 8-graders
+          in Swahili.
+          <br>
+          <q>Like in the movie Ratatouille ... “anybody can cock”.</q>
+        </p>
+        <br>
+        <p class="lead mb-0">
+          Source at gitlab:
+          <a href="https://gitlab.com/Freinet/LiaScript" target="_blank">
+            https://gitlab.com/Freinet/LiaScript
+          </a>
+        </p>
+        <p class="lead mb-0">
+          <br>
+          ... and most of all, I hate the fact that education is still a
+          business with private schools and universities, expensive BOOKS and MOOCS...
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Call to Action -->
+<section class="call-to-action text-white text-center" style="background: url('images/bg-masthead.jpg') no-repeat center center;">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-9 mx-auto">
+        <h2 class="mb-4">Share your knowledge and build online courses with simple Markdown!</h2>
+      </div>
+      <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+        <form>
+          <div class="form-row">
+            <div class="col-12 col-md-9 mb-2 mb-md-0">
+              <input type="url" class="form-control form-control-lg" placeholder="Enter your course url..." id="course_url2">
+            </div>
+            <div class="col-12 col-md-3">
+              <button class="btn btn-block btn-lg btn-primary" onclick="location.href = 'course/?'+document.getElementById('course_url2').value; return false;">Load!</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+        <ul class="list-inline mb-2">
+          <li class="list-inline-item">
+            <a href="#Loader">Loader</a>
+          </li>
+          <li class="list-inline-item">&sdot;</li>
+          <li class="list-inline-item">
+            <a href="#Concept">Concept</a>
+          </li>
+          <li class="list-inline-item">&sdot;</li>
+          <li class="list-inline-item">
+            <a href="#About">About</a>
+          </li>
+        </ul>
+        <p class="text-muted small mb-4 mb-lg-0">&copy; André Dietrich 2019. All Rights Reserved.</p>
+      </div>
+
+      <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
+        <ul class="list-inline mb-0">
+          <li class="list-inline-item mr-3">
+            <a href="mailto:LiaScript@web.de">LiaScript@web.de</a>
+          </li>
+        </ul>
+     </div>
+    </div>
+  </div>
+</footer>

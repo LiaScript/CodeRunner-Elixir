@@ -1,0 +1,8 @@
+<div id="lia" style="height: calc(100% - 56px);"></div>
+
+<link rel="stylesheet" href="<%= Routes.static_path(@conn, "/course/formula/katex.min.css") %>">
+<!--link rel="stylesheet" href="<%= Routes.static_path(@conn, "/liascript/lia/index.css") %>"-->
+
+<script type="text/javascript" src="<%= Routes.static_path(@conn, "/course/editor/index.js") %>"></script>
+<script type="text/javascript" src="<%= Routes.static_path(@conn, "/course/formula/index.js") %>"></script>
+<script type="text/javascript" src="<%= Routes.static_path(@conn, "/course/app.js") %>"></script>

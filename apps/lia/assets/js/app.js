@@ -2,7 +2,11 @@
 // The MiniCssExtractPlugin is used to separate it out into
 // its own CSS file.
 import 'bootstrap';
-import css from "../css/app.scss"
+import css from "../css/app.scss";
+
+import '../liascript/src/scss/main.scss';
+
+//import "../liascript/src/scss/main.scss";
 
 // webpack automatically bundles all modules in your
 // entry points. Those entry points can be configured
@@ -15,8 +19,22 @@ import "phoenix_html"
 // Import local files
 //
 // Local files can be imported directly using relative paths, for example:
+
+
 import socket from "./socket"
 
-import "../liascript/lia/index"
-//Lia.init(document.querySelector('#lia'), socket);
-//var lia = new LiaScript(document.body, false);
+import { LiaScript } from "../liascript/src/javascript/liascript/index"
+
+if(document.getElementById("lia")) {
+    var app = new LiaScript(
+      document.getElementById("lia"),
+      false,
+      null,
+      null,
+      "",
+      0,
+      true,
+      socket);
+} else {
+    var app = null;
+}

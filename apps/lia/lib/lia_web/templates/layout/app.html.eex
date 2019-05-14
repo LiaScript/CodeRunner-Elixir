@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Lia · Berlin</title>
+
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+
+    <!-- Fonts -->
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/material.css") %>">
+    <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/roboto.css") %>">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <!-- Favicons -->
+    <link href="<%= Routes.static_path(@conn, "/images/logo.png") %>" rel="apple-touch-icon">
+    <link href="<%= Routes.static_path(@conn, "/images/logo.png") %>" rel="icon" type="image/png">
+
+    <style>
+    .lds-dual-ring {
+      display: inline-block;
+      width: 150px;
+      height: 150px;
+    }
+    .lds-dual-ring:after {
+      content: " ";
+      display: block;
+      width: 128px;
+      height: 128px;
+      margin: 1px;
+      border-radius: 50%;
+      border: 5px solid #fff;
+      border-color: #000 transparent #000 transparent;
+      animation: lds-dual-ring 1.2s linear infinite;
+    }
+    @keyframes lds-dual-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    </style>
+  </head>
+  <body style="overflow-y:auto; overflow-x:hidden">
+    <main>
+      <!--p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p-->
+      <!--p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p-->
+      <%= render @view_module, @view_template, assigns %>
+    </main>
+
+    <!--script type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script-->
+  </body>
+</html>
