@@ -13,7 +13,7 @@ defmodule LiaWeb.Endpoint do
     at: "/",
     from: :lia,
     gzip: false,
-    only: ~w(css fonts course images js favicon.ico robots.txt)
+    only: ~w(css demos fonts course images js favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

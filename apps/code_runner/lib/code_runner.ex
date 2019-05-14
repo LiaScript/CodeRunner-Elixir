@@ -15,7 +15,7 @@ defmodule CodeRunner do
     CodeRunner.Agent.stop(pid)
   end
 
-  def handle(pid, %{"files" => files}, event_id, _log) do
+  def handle(pid, %{"files" => files}, event_id) do
     Logger.debug("files")
 
     case CodeRunner.Agent.set_files(pid, files) do
@@ -27,45 +27,41 @@ defmodule CodeRunner do
     end
   end
 
-  def handle(pid, %{"compile" => config, "order" => order}, event_id, log) do
+  def handle(pid, %{"compile" => config, "order" => order}, event_id) do
     Logger.debug("compile")
     {rslt, info, details} = CodeRunner.Agent.compile(pid, config)
     Logger.debug(Kernel.inspect({rslt, info, details}))
 
-    log.("compile", %{"rslt" => rslt, "info" => info, "details" => details})
-
     {rslt, %{message: info, details: Enum.map(order, &filter(&1, details)), event_id: event_id}}
   end
 
-  def handle(pid, %{"compile" => config}, event_id, log) do
+  def handle(pid, %{"compile" => config}, event_id) do
     Logger.debug("compile")
     {rslt, info, details} = CodeRunner.Agent.compile(pid, config)
-
-    log.("compile", %{"rslt" => rslt, "info" => info, "details" => details})
 
     {rslt, %{message: info, details: details, event_id: event_id}}
   end
 
-  def handle(pid, %{"execute" => config}, event_id, _log) do
+  def handle(pid, %{"execute" => config}, event_id) do
     Logger.debug("execute")
     CodeRunner.Agent.execute(pid, config, event_id)
   end
 
-  def handle(pid, %{"stop" => _config}, _event_id, _log) do
+  def handle(pid, %{"stop" => _config}, _event_id) do
     Logger.debug("stop")
     CodeRunner.Agent.stop(pid)
   end
 
-  def handle(pid, %{"input" => string}, _event_id, _log) do
+  def handle(pid, %{"input" => string}, _event_id) do
     Logger.debug("input")
     CodeRunner.Agent.input(pid, string)
   end
 
-  def handle(pid, %{"get_path" => file}, event_id, _log) do
+  def handle(pid, %{"get_path" => file}, event_id) do
     {:ok, %{message: CodeRunner.Agent.get_path(pid) <> "/" <> file, event_id: event_id}}
   end
 
-  def handle(_pid, data, event_id, _log) do
+  def handle(_pid, data, event_id) do
     Logger.debug("could not handle #{Kernel.inspect(data)}")
     {:error, %{message: "no such option: " <> Kernel.inspect(data), event_id: event_id}}
   end
