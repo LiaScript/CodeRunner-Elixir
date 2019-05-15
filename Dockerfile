@@ -1,11 +1,15 @@
 FROM elixir:1.8-slim
 
-RUN apt-get update; \
-    apt-get install -y wget firejail
+RUN apt-get update && \
+    apt-get install -y wget firejail && \
+    apt-get autoclean && \
+    apt-get clean
 
 RUN wget -qO- https://deb.nodesource.com/setup_12.x | bash -
-RUN apt-get update; \
-    apt-get install -y build-essential nodejs
+RUN apt-get update && \
+    apt-get install -y build-essential nodejs && \
+    apt-get autoclean && \
+    apt-get clean
 
 RUN npm install -g --unsafe-perm=true --allow-root elm
 
