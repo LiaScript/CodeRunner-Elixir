@@ -20,9 +20,10 @@ ADD . /berlin
 WORKDIR /berlin/apps/lia/assets
 RUN wget https://gitlab.com/Freinet/LiaScript/-/archive/master/LiaScript-master.zip -O liascript.zip && \
     unzip liascript.zip && \
+    mv LiaScript-master liascript && \
     rm liascript.zip
 
-RUN apt-get purge wget unzip && \
+RUN apt-get purge -y wget unzip && \
     apt-get autoremove && \
     apt-get autoclean && \
     apt-get clean
