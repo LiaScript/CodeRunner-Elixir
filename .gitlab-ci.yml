@@ -1,17 +1,15 @@
 stages:
 - build_image
 
-#variables:
-#  GIT_SUBMODULE_STRATEGY: recursive --depth 1
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  GIT_DEPTH: "1"
 
 job 1:
   stage: build_image
   image: docker:git
   services:
   - docker:dind
-  before_script:
-  - git submodule sync --recursive --depth 1
-  - git submodule update --init --recursive --depth 1
   script:
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
   - docker build -t registry.gitlab.com/freinet/lia:${CI_COMMIT_REF_NAME:1} .
