@@ -6,7 +6,7 @@ RUN apt-get update && \
     apt-get autoclean && \
     apt-get clean
 
-RUN wget -qO- https://deb.nodesource.com/setup_12.x | bash -
+RUN wget -qO- https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential nodejs && \
     apt-get autoremove && \
@@ -35,7 +35,7 @@ RUN mix local.hex --force; \
     HEX_HTTP_CONCURRENCY=1 HEX_HTTP_TIMEOUT=620 mix deps.get --only prod
 
 WORKDIR /berlin/apps/lia/assets
-RUN pwd && ls -Shal && npm install && \
+RUN npm install && \
     npm run deploy
 
 WORKDIR /berlin
