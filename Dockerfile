@@ -1,7 +1,7 @@
 FROM elixir:1.8-slim
 
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y wget unzip firejail python3.5 mono-mcs && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y wget firejail python3.5 mono-mcs && \
     apt-get autoremove && \
     apt-get autoclean && \
     apt-get clean
@@ -18,13 +18,13 @@ RUN npm install -g webpack webpack-cli
 
 ADD . /berlin
 
-WORKDIR /berlin/apps/lia/assets
-RUN wget https://gitlab.com/Freinet/LiaScript/-/archive/master/LiaScript-master.zip && \
-    unzip LiaScript-master.zip && \
-    mv LiaScript-master liascript && \
-    rm LiaScript-master.zip
+#WORKDIR /berlin/apps/lia/assets
+#RUN wget https://gitlab.com/Freinet/LiaScript/-/archive/master/LiaScript-master.zip && \
+#    unzip LiaScript-master.zip && \
+#    mv LiaScript-master liascript && \
+#    rm LiaScript-master.zip
 
-RUN apt-get purge -y wget unzip && \
+RUN apt-get purge -y wget && \
     apt-get autoremove && \
     apt-get autoclean && \
     apt-get clean
