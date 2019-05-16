@@ -1,8 +1,12 @@
 stages:
 - build_image
 
-variables:
-  GIT_SUBMODULE_STRATEGY: recursive
+#variables:
+#  GIT_SUBMODULE_STRATEGY: recursive --depth 1
+
+before_script:
+  - git submodule sync --recursive --depth 1
+  - git submodule update --init --recursive --depth 1
 
 job 1:
   stage: build_image
