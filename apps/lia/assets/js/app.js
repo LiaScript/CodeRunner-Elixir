@@ -33,7 +33,7 @@ if(document.getElementById("lia")) {
       "",
       0,
       true,
-      socket.channel("lia:"+"2222"));
+      socket.channel("lia:"));
 } else {
     var app = null;
 }
