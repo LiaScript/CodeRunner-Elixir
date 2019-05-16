@@ -1,6 +1,9 @@
 stages:
 - build_image
 
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 job 1:
   stage: build_image
   image: docker:git
