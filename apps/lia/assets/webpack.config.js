@@ -87,7 +87,7 @@ module.exports = (env, options) => ({
       { from: 'liascript/src/assets/logo.png', to: '../images' },
       { from: 'node_modules/katex/dist/katex.min.css', to: '../course/formula' },
       { from: 'node_modules/ace-builds/src-min-noconflict/', to: '../course/editor' },
-      { from: "liascript/demos/test.md", to: '../demos'},
+      //{ from: "liascript/demos/test.md", to: '../demos'},
       { from: "liascript/vendor/material_icons/material.css", to: '../css'},
       { from: "liascript/vendor/roboto/roboto.css", to: '../css'},
       { from: "liascript/vendor/material_icons/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2", to: '../css/fonts'},
