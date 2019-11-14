@@ -48,5 +48,3 @@ CMD MIX_ENV=prod mix phx.server
 #CMD MIX_ENV=prod mix ecto.migrate && \
 #   MIX_ENV=prod mix run apps/elab/config/add_admin.exs && \
 #   MIX_ENV=prod mix phx.server
-
-ENTRYPOINT ["tail", "-f", "/dev/null"]
