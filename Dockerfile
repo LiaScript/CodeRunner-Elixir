@@ -15,6 +15,7 @@ RUN apt-get update && \
 
 RUN npm install -g --unsafe-perm=true --allow-root elm
 RUN npm install -g webpack webpack-cli
+RUN npm update
 
 ADD . /berlin
 
