@@ -1,7 +1,7 @@
 FROM elixir:1.8-slim
 
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y wget firejail python3.5 mono-mcs && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y wget firejail python3.5 mono-mcs unzip && \
     apt-get autoremove && \
     apt-get autoclean && \
     apt-get clean
@@ -14,16 +14,18 @@ RUN apt-get update && \
     apt-get clean
 
 RUN npm install -g --unsafe-perm=true --allow-root elm
-RUN npm install -g webpack webpack-cli
+RUN npm install -g --save-dev webpack webpack-cli
 RUN npm update
 
 ADD . /berlin
+EXPOSE 4000
 
-#WORKDIR /berlin/apps/lia/assets
-#RUN wget https://gitlab.com/Freinet/LiaScript/-/archive/master/LiaScript-master.zip && \
-#    unzip LiaScript-master.zip && \
-#    mv LiaScript-master liascript && \
-#    rm LiaScript-master.zip
+WORKDIR /berlin/apps/lia/assets
+RUN wget https://gitlab.com/Freinet/LiaScript/-/archive/master/LiaScript-master.zip && \
+    unzip LiaScript-master.zip && \
+    rm -r liascript && \
+    mv LiaScript-master liascript && \
+    rm LiaScript-master.zip
 
 RUN apt-get purge -y wget && \
     apt-get autoremove && \
@@ -40,8 +42,10 @@ RUN npm install && \
     npm run deploy
 
 WORKDIR /berlin
-RUN MIX_ENV=prod mix deps.compile --all && \
-    MIX_ENV=prod mix phx.digest
+RUN MIX_ENV=prod mix deps.compile --all
+
+WORKDIR /berlin/apps/lia
+RUN MIX_ENV=prod mix phx.digest
 
 CMD MIX_ENV=prod mix phx.server
 
