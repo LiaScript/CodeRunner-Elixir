@@ -20,13 +20,6 @@ RUN npm update
 ADD . /berlin
 EXPOSE 4000
 
-WORKDIR /berlin/apps/lia/assets
-RUN wget https://gitlab.com/Freinet/LiaScript/-/archive/master/LiaScript-master.zip && \
-    unzip LiaScript-master.zip && \
-    rm -r liascript && \
-    mv LiaScript-master liascript && \
-    rm LiaScript-master.zip
-
 RUN apt-get purge -y wget && \
     apt-get autoremove && \
     apt-get autoclean && \
@@ -38,7 +31,8 @@ RUN mix local.hex --force; \
     HEX_HTTP_CONCURRENCY=1 HEX_HTTP_TIMEOUT=620 mix deps.get --only prod
 
 WORKDIR /berlin/apps/lia/assets
-RUN npm install && \
+RUN rm package-lock.json && \
+    npm install && \
     npm run deploy
 
 WORKDIR /berlin
