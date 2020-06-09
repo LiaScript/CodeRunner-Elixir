@@ -10,8 +10,8 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :lia, LiaWeb.Endpoint,
-  http: [:inet6, port: System.get_env("PORT") || 4000],
-  url: [schema: "https", host: System.get_env("PORT") || "localhost", port: System.get_env("PORT") || 443],
+  http: [port: {:system, "PORT"}],
+  url: [scheme: "https", host: "whispering-stream-86856.herokuapp.com", port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/cache_manifest.json",
   secret_key_base: System.get_env("SECRET_KEY_BASE")

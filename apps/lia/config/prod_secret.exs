@@ -9,4 +9,6 @@ use Mix.Config
 # kept out of version control and might be hard to recover
 # or recreate for your teammates (or yourself later on).
 config :lia, LiaWeb.Endpoint,
-  secret_key_base: "TjyqLVafq6Z4mZBNg8c14ob5FU5eh4y6FkTGQ7diQ6XTFburNDLUXLQg9zX8rpxZ"
+  secret_key_base: (System.get_env("SECRET_KEY_BASE") || "TjyqLVafq6Z4mZBNg8c14ob5FU5eh4y6FkTGQ7diQ6XTFburNDLUXLQg9zX8rpxZ"),
+  ssl: true,
+  pool_size: "10"
