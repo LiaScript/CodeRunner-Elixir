@@ -18,7 +18,6 @@ RUN npm install -g --save-dev webpack webpack-cli
 RUN npm update
 
 ADD . /berlin
-EXPOSE 4000
 
 RUN apt-get purge -y wget && \
     apt-get autoremove && \
@@ -41,7 +40,7 @@ RUN MIX_ENV=prod mix deps.compile --all
 WORKDIR /berlin/apps/lia
 RUN MIX_ENV=prod mix phx.digest
 
-CMD MIX_ENV=prod mix phx.server
+CMD mix local.hex --force && MIX_ENV=prod mix phx.server
 
 #CMD MIX_ENV=prod mix ecto.migrate && \
 #   MIX_ENV=prod mix run apps/elab/config/add_admin.exs && \
