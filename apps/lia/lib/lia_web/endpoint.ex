@@ -1,10 +1,9 @@
 defmodule LiaWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :lia
 
-  socket "/websocket", LiaWeb.UserSocket,
+  socket "/socket", LiaWeb.UserSocket,
     websocket: true,
-    longpoll: false,
-    check_origin: false
+    longpoll: false
 
   # Serve at "/" the static files from "priv/static" directory.
   #
