@@ -2,6 +2,7 @@ defmodule LiaWeb.LiaChannel do
   use LiaWeb, :channel
 
   require Logger
+  require CodeRunner
 
   def join("lia:" <> _id, _data, socket) do
     Logger.info("new login")
