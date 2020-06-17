@@ -1,16 +1,19 @@
-FROM elixir:1.8-slim
+FROM elixir:1.10.3-slim
 
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y wget firejail python3.5 mono-mcs unzip && \
-    apt-get autoremove && \
-    apt-get autoclean && \
-    apt-get clean
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y wget firejail python3.5 mono-complete mono-mcs unzip \
+    && apt-get autoremove -y \
+    && apt-get autoclean -y \
+    && apt-get clean \
+    && chown root:root /usr/bin/firejail \
+    && chmod u+s /usr/bin/firejail
+
 
 RUN wget -qO- https://deb.nodesource.com/setup_10.x | bash -
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y build-essential nodejs && \
-    apt-get autoremove && \
-    apt-get autoclean && \
+    apt-get autoremove -y && \
+    apt-get autoclean -y && \
     apt-get clean
 
 RUN npm install -g --unsafe-perm=true --allow-root elm
@@ -20,8 +23,8 @@ RUN npm update
 ADD . /berlin
 
 RUN apt-get purge -y wget && \
-    apt-get autoremove && \
-    apt-get autoclean && \
+    apt-get autoremove -y && \
+    apt-get autoclean -y && \
     apt-get clean
 
 WORKDIR /berlin
