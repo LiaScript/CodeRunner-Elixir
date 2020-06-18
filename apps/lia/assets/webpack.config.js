@@ -1,8 +1,6 @@
 const path = require('path');
 const glob = require('glob');
 
-var elmSource = __dirname + '/liascript'
-const elmMinify = require("elm-minify");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -16,10 +14,7 @@ module.exports = (env, options) => ({
     ]
   },
   entry: {
-    '/editor/index':  './liascript/src/javascript/webcomponents/ace.js',
-    '/formula/index': './liascript/src/javascript/webcomponents/katex.js',
-    'main': './js/main.js',
-    'app': ['./js/app.js'].concat(glob.sync('./vendor/**/*.js'))
+    'main': './js/main.js'
   },
   output: {
     filename: '[name].js',
@@ -64,34 +59,13 @@ module.exports = (env, options) => ({
         use: [
           'file-loader'
         ]
-      },
-      {
-        test: /\.elm$/,
-        exclude: [/elm-stuff/, /node_modules/],
-        use: {
-          loader: 'elm-webpack-loader?verbose=true',
-          options: {
-            cwd: elmSource,
-            //debug: true,
-            optimize: true,
-          },
-        },
       }
     ]
   },
   plugins: [
-    new elmMinify.WebpackPlugin(),
     new MiniCssExtractPlugin({ filename: '../css/[name].css' }),
     new CopyWebpackPlugin([
-      { from: 'static/', to: '../' },
-      { from: 'liascript/src/assets/logo.png', to: '../images' },
-      { from: 'node_modules/katex/dist/katex.min.css', to: '../course/formula' },
-      { from: 'node_modules/ace-builds/src-min-noconflict/', to: '../course/editor' },
-      //{ from: "liascript/demos/test.md", to: '../demos'},
-      { from: "liascript/vendor/material_icons/material.css", to: '../css'},
-      { from: "liascript/vendor/roboto/roboto.css", to: '../css'},
-      { from: "liascript/vendor/material_icons/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2", to: '../css/fonts'},
-      { from: "liascript/vendor/roboto/fonts", to: '../css/fonts'},
+      { from: 'static/', to: '../' }
     ])
   ]
 });

@@ -113,6 +113,9 @@ defmodule CodeRunner.Agent do
       ["mono" | args] ->
         Comp.Mono.compile(args, config.path)
 
+      ["dotnet" | args] ->
+        Comp.DotNet.compile(args, config.path)
+
       [comp | _args] ->
         {:error, "Compiler not found: #{comp}", []}
     end
