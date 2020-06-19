@@ -1,4 +1,4 @@
-FROM elixir:1.10.3-slim
+FROM elixir:1.9.0-slim
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y wget
@@ -11,14 +11,21 @@ RUN npm install -g --save-dev webpack webpack-cli \
     && npm update
 
 RUN apt-get update \
-    && apt-get upgrade \
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y python3.5 mono-complete mono-mcs unzip
 
-RUN wget https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb \
+
+RUN wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg \
+    && mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/ \
+    && wget https://packages.microsoft.com/config/debian/9/prod.list \
+    && mv prod.list /etc/apt/sources.list.d/microsoft-prod.list \
+    && chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg \
+    && chown root:root /etc/apt/sources.list.d/microsoft-prod.list \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https \
+    && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y dotnet-sdk-3.1
+
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y firejail \
     && chown root:root /usr/bin/firejail \
