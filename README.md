@@ -18,7 +18,7 @@ script:   https://cdn.jsdelivr.net/npm/phoenix-js@1.0.3/dist/glob/main.js
 
 @LIA.eval_
 <script>
-var ROOT_SOCKET = 'wss://evening-harbor-69882.herokuapp.com/socket'; // default path is /socket
+var ROOT_SOCKET = 'wss://liarunner.herokuapp.com/socket'; // default path is /socket
 var socket = new Socket(ROOT_SOCKET);
 socket.connect(); // connect
 var chan = socket.channel("lia:asfdasd");
@@ -79,6 +79,80 @@ send.handle("input", (e) => {
 })
 send.handle("stop",  (e) => {
     chan.push("lia", {event_id: @0, message: {stop: ""}})
+});
+
+
+"LIA: wait"
+</script>
+
+
+@end
+
+
+
+@LIA.eval2
+<script>
+var ROOT_SOCKET = 'wss://liarunner.herokuapp.com/socket'; // default path is /socket
+var socket = new Socket(ROOT_SOCKET);
+socket.connect(); // connect
+var chan = socket.channel("lia:asfdasd");
+
+chan.on("service", (e) => {
+  if (e.message.stderr)
+    console.error(e.message.stderr)
+  else if (e.message.stdout) {
+    if (!e.message.stdout.startsWith("Warning: cannot switch "))
+      console.log(e.message.stdout)
+  }
+  else if (e.message.exit) {
+    console.debug(e.message.exit)
+    send.lia("LIA: stop")
+  }
+})
+
+chan.join()
+.receive("ok", (e) => {
+    chan.push("lia", {event_id: "@0", message: {start: "CodeRunner", settings: null}})
+    .receive("ok", (e) => {
+        chan.push("lia", {event_id: "@0", message: {files: {"Program.cs": `@input`, "ClassExample.cs": `@input(1)`, "LiascriptMeetsCsharp.csproj": `@input(2)`}}})
+        .receive("ok", (e) => {
+            console.debug(e.message)
+            chan.push("lia", {event_id: "@0", message: {compile: "dotnet build", order: []}})
+            .receive("ok", (e) => {
+                console.debug(e.message)
+                chan.push("lia", {event_id: "@0", message: {execute: "dotnet run"}})
+                .receive("ok", (e) => {
+                    //console.debug(e.message)
+                    send.lia("LIA: terminal")
+                })
+                .receive("error", (e) => {
+                    console.err("could not start application => ", e)
+                    send.lia("LIA: stop")
+                })
+            })
+            .receive("error", (e) => {
+                send.lia(e.message, e.details, false)
+                send.lia("LIA: stop")
+            })
+        })
+        .receive("error", (e) => {
+            lia.error("could not setup files => ", e)
+            send.lia("LIA: stop")
+        })
+    })
+    .receive("error", (e) => {
+        lia.error("could not start service => ", e)
+        send.lia("LIA: stop")
+    })
+})
+.receive("error", (e) => { lia.error("channel join => ", e); });
+
+
+send.handle("input", (e) => {
+    chan.push("lia", {event_id: "@0", message: {input: e}})
+})
+send.handle("stop",  (e) => {
+    chan.push("lia", {event_id: "@0", message: {stop: ""}})
 });
 
 
@@ -173,6 +247,101 @@ namespace check1
 }
 ```
 @LIA.eval({'main.cs':`@input`},"main.cs",mono main.cs,mono main.exe)
+
+
+## C# 2
+
+
+
+```csharp           Program.cs
+using System;
+
+namespace LiascriptMeetsCsharp
+{
+    class Program
+    {
+        private const string Message = "I ❤ LiaScript! ";
+
+        static void Main(string[] args)
+        {
+            ClassExample greeter = new ClassExample(5, Message);
+            Console.WriteLine(greeter);
+        }
+    }
+}
+```
+```csharp           -ClassExample.cs
+using System;
+using System.Diagnostics;
+using System.Text;
+
+namespace LiascriptMeetsCsharp
+{
+    class ClassExample
+    {
+        private int greetingCounts = 0;
+        private string greetings = "Hello";
+
+        public ClassExample(int GreetingCounts,
+                     string message)
+        {
+            this.greetingCounts = GreetingCounts;
+            this.greetings = message;
+        }
+
+        public int GreetingCounts
+        {
+            get { return greetingCounts; }
+            set {
+                if (value > 100)
+                    throw new ArgumentOutOfRangeException(
+                        $"{nameof(value)} must be between 0 and 100.");
+                greetingCounts = value;
+            }
+       }
+
+
+        public string Greetings
+        {
+            get { return greetings; }
+            set {greetings = value;}
+        }
+
+        public override string ToString() => new StringBuilder(greetings.Length * greetingCounts).Insert(0, greetings, greetingCounts).ToString();
+    }
+}
+```
+``` xml           -LiaScriptMeetsScharp.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+</Project>
+```
+@LIA.eval2(@uid)
+
+### Python2
+
+
+```c
+for i in range(10):
+  print "Hallo Welt", i
+```
+@LIA.eval({'main.py':`@input`}, "main.py", python -m compileall ., python main.pyc)
+
+
+### Python3
+
+
+```c
+for i in range(10):
+  print("Hallo Welt", i)
+```
+@LIA.eval({'main.py':`@input`}, "main.py", python3 -m compileall ., python3 main.pyc)
+
 
 
 # Deploying to Heroku

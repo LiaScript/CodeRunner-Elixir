@@ -108,7 +108,10 @@ defmodule CodeRunner.Agent do
         Comp.Java.compile(args, config.path)
 
       ["python" | args] ->
-        Comp.Python.compile(args, config.path)
+        Comp.Python.compile("python", args, config.path)
+
+      ["python3" | args] ->
+        Comp.Python.compile("python3", args, config.path)
 
       ["mono" | args] ->
         Comp.Mono.compile(args, config.path)

@@ -24,10 +24,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y firejail \
     && chown root:root /usr/bin/firejail \
     && chmod u+s /usr/bin/firejail
 
-#RUN apt-get autoremove -y \
-#    && apt-get autoclean -y \
-#    && apt-get clean \
-
 ADD . /berlin
 
 WORKDIR /berlin
@@ -39,11 +35,10 @@ WORKDIR /berlin/apps/lia/assets
 RUN npm install \
     && npm run deploy
 
-WORKDIR /berlin
-RUN MIX_ENV=prod mix deps.compile --all
-
 WORKDIR /berlin/apps/lia
 RUN MIX_ENV=prod mix phx.digest
 
 WORKDIR /berlin
+RUN MIX_ENV=prod mix deps.compile --all
+
 CMD mix local.hex --force && MIX_ENV=prod mix phx.server
