@@ -14,14 +14,15 @@ comment:  This template allows to run C, C++, C# code on a server, while
 
 script:   https://cdn.jsdelivr.net/npm/phoenix-js@1.0.3/dist/glob/main.js
 
-@LIA.eval: @LIA.eval_("@uid",@0,@1,@2,@3)
+@LIA.eval: @LIA.eval_(@uid,`@0`,@1,@2)
 
 @LIA.eval_
 <script>
+var hash = Math.random().toString(36).replace(/[^a-z]+/g, '')
 var ROOT_SOCKET = 'wss://liarunner.herokuapp.com/socket'; // default path is /socket
 var socket = new Socket(ROOT_SOCKET);
 socket.connect(); // connect
-var chan = socket.channel("lia:asfdasd");
+var chan = socket.channel("lia:"+hash);
 
 chan.on("service", (e) => {
   if (e.message.stderr)
@@ -36,112 +37,69 @@ chan.on("service", (e) => {
   }
 })
 
-chan.join()
-.receive("ok", (e) => {
-    chan.push("lia", {event_id: @0, message: {start: "CodeRunner", settings: null}})
-    .receive("ok", (e) => {
-        chan.push("lia", {event_id: @0, message: {files: @1}})
-        .receive("ok", (e) => {
-            console.debug(e.message)
-            chan.push("lia", {event_id: @0, message: {compile: "@3", order: [@2]}})
-            .receive("ok", (e) => {
-                console.debug(e.message)
-                chan.push("lia", {event_id: @0, message: {execute: "@4"}})
-                .receive("ok", (e) => {
-                    //console.debug(e.message)
-                    send.lia("LIA: terminal")
-                })
-                .receive("error", (e) => {
-                    console.err("could not start application => ", e)
-                    send.lia("LIA: stop")
-                })
-            })
-            .receive("error", (e) => {
-                send.lia(e.message, e.details, false)
-                send.lia("LIA: stop")
-            })
-        })
-        .receive("error", (e) => {
-            lia.error("could not setup files => ", e)
-            send.lia("LIA: stop")
-        })
-    })
-    .receive("error", (e) => {
-        lia.error("could not start service => ", e)
-        send.lia("LIA: stop")
-    })
-})
-.receive("error", (e) => { lia.error("channel join => ", e); });
+var order = @1
+var files = {}
 
 
-send.handle("input", (e) => {
-    chan.push("lia", {event_id: @0, message: {input: e}})
-})
-send.handle("stop",  (e) => {
-    chan.push("lia", {event_id: @0, message: {stop: ""}})
-});
+if (order[0])
+  files[order[0]] = `@input(0)`
+if (order[1])
+  files[order[1]] = `@input(1)`
+if (order[2])
+  files[order[2]] = `@input(2)`
+if (order[3])
+  files[order[3]] = `@input(3)`
+if (order[4])
+  files[order[4]] = `@input(4)`
+if (order[5])
+  files[order[5]] = `@input(5)`
+if (order[6])
+  files[order[6]] = `@input(6)`
+if (order[7])
+  files[order[7]] = `@input(7)`
+if (order[8])
+  files[order[8]] = `@input(8)`
+if (order[9])
+  files[order[9]] = `@input(9)`
 
-
-"LIA: wait"
-</script>
-
-
-@end
-
-
-
-@LIA.eval2
-<script>
-var ROOT_SOCKET = 'wss://liarunner.herokuapp.com/socket'; // default path is /socket
-var socket = new Socket(ROOT_SOCKET);
-socket.connect(); // connect
-var chan = socket.channel("lia:asfdasd");
-
-chan.on("service", (e) => {
-  if (e.message.stderr)
-    console.error(e.message.stderr)
-  else if (e.message.stdout) {
-    if (!e.message.stdout.startsWith("Warning: cannot switch "))
-      console.log(e.message.stdout)
-  }
-  else if (e.message.exit) {
-    console.debug(e.message.exit)
-    send.lia("LIA: stop")
-  }
-})
 
 chan.join()
 .receive("ok", (e) => {
     chan.push("lia", {event_id: "@0", message: {start: "CodeRunner", settings: null}})
     .receive("ok", (e) => {
-        chan.push("lia", {event_id: "@0", message: {files: {"Program.cs": `@input`, "ClassExample.cs": `@input(1)`, "LiascriptMeetsCsharp.csproj": `@input(2)`}}})
+        chan.push("lia", {event_id: "@0", message: {files: files}})
         .receive("ok", (e) => {
             console.debug(e.message)
-            chan.push("lia", {event_id: "@0", message: {compile: "dotnet build", order: []}})
+            chan.push("lia", {event_id: "@0", message: {compile: @2, order: order}})
             .receive("ok", (e) => {
                 console.debug(e.message)
-                chan.push("lia", {event_id: "@0", message: {execute: "dotnet run"}})
+                chan.push("lia", {event_id: "@0", message: {execute: @3}})
                 .receive("ok", (e) => {
                     //console.debug(e.message)
+                    //console.clear()
                     send.lia("LIA: terminal")
                 })
                 .receive("error", (e) => {
                     console.err("could not start application => ", e)
+                    chan.push("lia", {event_id: "@0", message: {stop: ""}})
                     send.lia("LIA: stop")
                 })
             })
             .receive("error", (e) => {
                 send.lia(e.message, e.details, false)
+                chan.push("lia", {event_id: "@0", message: {stop: ""}})
                 send.lia("LIA: stop")
             })
         })
         .receive("error", (e) => {
             lia.error("could not setup files => ", e)
+            chan.push("lia", {event_id: "@0", message: {stop: ""}})
             send.lia("LIA: stop")
         })
     })
     .receive("error", (e) => {
         lia.error("could not start service => ", e)
+        chan.push("lia", {event_id: "@0", message: {stop: ""}})
         send.lia("LIA: stop")
     })
 })
@@ -189,7 +147,7 @@ int main (void){
 	return 0;
 }
 ```
-@LIA.eval({'main.c':`@input`}, "main.c", gcc -Wall main.c -o a.out, ./a.out)
+@LIA.eval(`["main.c"]`, `gcc -Wall main.c -o a.out`, `./a.out`)
 
 
 ### C++
@@ -211,7 +169,7 @@ int main (void){
 	return 0;
 }
 ```
-@LIA.eval({'main.cpp':`@input`}, "main.cpp", g++ main.cpp -o a.out, ./a.out)
+@LIA.eval(`["main.cpp"]`, `g++ main.cpp -o a.out`, `./a.out`)
 
 ### C#
 
@@ -246,7 +204,7 @@ namespace check1
     }
 }
 ```
-@LIA.eval({'main.cs':`@input`},"main.cs",mono main.cs,mono main.exe)
+@LIA.eval(`["main.cs"]`, `mono main.cs`, `mono main.exe`)
 
 
 ## C# 2
@@ -321,26 +279,26 @@ namespace LiascriptMeetsCsharp
 
 </Project>
 ```
-@LIA.eval2(@uid)
+@LIA.eval(`["Program.cs", "ClassExample.cs", "LiaScriptMeetsScharp.csproj"]`, `dotnet build`, `dotnet run`)
 
 ### Python2
 
 
-```c
+```python
 for i in range(10):
   print "Hallo Welt", i
 ```
-@LIA.eval({'main.py':`@input`}, "main.py", python -m compileall ., python main.pyc)
+@LIA.eval(`["main.py"]`, `python -m compileall .`, `python main.pyc`)
 
 
 ### Python3
 
 
-```c
+```pythong
 for i in range(10):
   print("Hallo Welt", i)
 ```
-@LIA.eval({'main.py':`@input`}, "main.py", python3 -m compileall ., python3 main.pyc)
+@LIA.eval(`["main.py"]`, `python3 -m compileall .`, `python3 main.py`)
 
 
 
