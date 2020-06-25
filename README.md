@@ -147,7 +147,7 @@ int main (void){
 	return 0;
 }
 ```
-@LIA.eval(`["main.c"]`, `gcc -Wall main.c -o a.out`, `./a.out`)
+@LIA.eval(`["main.c"]`, `gcc-10 -Wall main.c -o a.out`, `./a.out`)
 
 
 ### C++

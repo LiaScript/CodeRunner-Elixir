@@ -26,6 +26,16 @@ RUN wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor 
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y dotnet-sdk-3.1
 
+WORKDIR /opt
+RUN wget http://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-10.1.0/gcc-10.1.0.tar.gz \
+    && tar zxf gcc-10.1.0.tar.gz \
+    && cd gcc-10.1.0 \
+    && ./contrib/download_prerequisites \
+    && ./configure --disable-multilib \
+    && make -j 4 \
+    && make install \
+    && cd .. \
+    && rm -rf gcc-10.1.0
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y firejail \
     && chown root:root /usr/bin/firejail \
