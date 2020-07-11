@@ -99,10 +99,7 @@ defmodule CodeRunner.Agent do
         Comp.Clang.compile(args, config.path)
 
       ["gcc" | args] ->
-        Comp.Gcc.compile("gcc", args, config.path)
-
-      ["gcc-10" | args] ->
-        Comp.Gcc.compile("gcc-10", args, config.path)
+        Comp.Gcc.compile(args, config.path)
 
       ["g++" | args] ->
         Comp.Gpp.compile(args, config.path)

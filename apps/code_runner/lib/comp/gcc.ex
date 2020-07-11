@@ -1,8 +1,8 @@
 defmodule CodeRunner.Comp.Gcc do
   import CodeRunner.Comp.Helper, only: [append: 2, parse_clike: 2]
 
-  def compile(gcc, args, path) do
-    case System.cmd(gcc, args, cd: path, stderr_to_stdout: true) do
+  def compile(args, path) do
+    case System.cmd("gcc", args, cd: path, stderr_to_stdout: true) do
       {msg, 0} ->
         {:ok, msg, parse_warning(msg)}
 
