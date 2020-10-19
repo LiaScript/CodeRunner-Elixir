@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    LiaScript@github.io
 
-version:  0.0.1
+version:  0.0.2
 
 language: en
 
@@ -14,7 +14,8 @@ comment:  This template allows to run C, C++, C# code on a server, while
 
 script:   https://cdn.jsdelivr.net/npm/phoenix-js@1.0.3/dist/glob/main.js
 
-@LIA.eval: @LIA.eval_(@uid,`@0`,@1,@2)
+@LIA.eval: @LIA.eval_(false,@uid,`@0`,@1,@2)
+@LIA.evalWithDebug: @LIA.eval_(true,@uid,`@0`,@1,@2)
 
 @LIA.eval_
 <script>
@@ -32,12 +33,12 @@ chan.on("service", (e) => {
       console.log(e.message.stdout)
   }
   else if (e.message.exit) {
-    console.debug(e.message.exit)
+    if(@0) console.debug(e.message.exit)
     send.lia("LIA: stop")
   }
 })
 
-var order = @1
+var order = @2
 var files = {}
 
 
@@ -65,15 +66,15 @@ if (order[9])
 
 chan.join()
 .receive("ok", (e) => {
-    chan.push("lia", {event_id: "@0", message: {start: "CodeRunner", settings: null}})
+    chan.push("lia", {event_id: "@1", message: {start: "CodeRunner", settings: null}})
     .receive("ok", (e) => {
-        chan.push("lia", {event_id: "@0", message: {files: files}})
+        chan.push("lia", {event_id: "@1", message: {files: files}})
         .receive("ok", (e) => {
-            console.debug(e.message)
-            chan.push("lia", {event_id: "@0", message: {compile: @2, order: order}})
+            if(@0) console.debug(e.message)
+            chan.push("lia", {event_id: "@1", message: {compile: @3, order: order}})
             .receive("ok", (e) => {
-                console.debug(e.message)
-                chan.push("lia", {event_id: "@0", message: {execute: @3}})
+                if(@0) console.debug(e.message)
+                chan.push("lia", {event_id: "@1", message: {execute: @4}})
                 .receive("ok", (e) => {
                     //console.debug(e.message)
                     //console.clear()
@@ -81,25 +82,25 @@ chan.join()
                 })
                 .receive("error", (e) => {
                     console.err("could not start application => ", e)
-                    chan.push("lia", {event_id: "@0", message: {stop: ""}})
+                    chan.push("lia", {event_id: "@1", message: {stop: ""}})
                     send.lia("LIA: stop")
                 })
             })
             .receive("error", (e) => {
                 send.lia(e.message, e.details, false)
-                chan.push("lia", {event_id: "@0", message: {stop: ""}})
+                chan.push("lia", {event_id: "@1", message: {stop: ""}})
                 send.lia("LIA: stop")
             })
         })
         .receive("error", (e) => {
             lia.error("could not setup files => ", e)
-            chan.push("lia", {event_id: "@0", message: {stop: ""}})
+            chan.push("lia", {event_id: "@1", message: {stop: ""}})
             send.lia("LIA: stop")
         })
     })
     .receive("error", (e) => {
         lia.error("could not start service => ", e)
-        chan.push("lia", {event_id: "@0", message: {stop: ""}})
+        chan.push("lia", {event_id: "@1", message: {stop: ""}})
         send.lia("LIA: stop")
     })
 })
@@ -107,10 +108,10 @@ chan.join()
 
 
 send.handle("input", (e) => {
-    chan.push("lia", {event_id: "@0", message: {input: e}})
+    chan.push("lia", {event_id: "@1", message: {input: e}})
 })
 send.handle("stop",  (e) => {
-    chan.push("lia", {event_id: "@0", message: {stop: ""}})
+    chan.push("lia", {event_id: "@1", message: {stop: ""}})
 });
 
 
@@ -284,6 +285,30 @@ for i in range(10):
 ```
 @LIA.eval(`["main.py"]`, `python3 -m compileall .`, `python3 main.py`)
 
+## `@LIA.evalWithDebug`
+
+This does basically the same as `@LIA.eval`, but it will add additional
+Debug-information about the CodeRunner status to the console.
+
+
+```c
+#include <stdio.h>
+
+int main (void){
+	int i = 0;
+	int max = 0;
+
+	printf("How many hellos: ");
+	scanf("%d",&max);
+
+  for(i=0; i<max; i++)
+    printf ("Hello, world %d!\n", i);
+
+	return 0;
+}
+```
+@LIA.evalWithDebug(`["main.c"]`, `gcc -Wall main.c -o a.out`, `./a.out`)
+
 
 ## Deploying to Heroku
 
@@ -325,7 +350,8 @@ raw file of this document.
 ``` js
 script:   https://cdn.jsdelivr.net/npm/phoenix-js@1.0.3/dist/glob/main.js
 
-@LIA.eval: @LIA.eval_(@uid,`@0`,@1,@2)
+@LIA.eval: @LIA.eval_(false,@uid,`@0`,@1,@2)
+@LIA.evalWithDebug: @LIA.eval_(true,@uid,`@0`,@1,@2)
 
 @LIA.eval_
 <script>
@@ -343,12 +369,12 @@ chan.on("service", (e) => {
       console.log(e.message.stdout)
   }
   else if (e.message.exit) {
-    console.debug(e.message.exit)
+    if(@0) console.debug(e.message.exit)
     send.lia("LIA: stop")
   }
 })
 
-var order = @1
+var order = @2
 var files = {}
 
 
@@ -376,15 +402,15 @@ if (order[9])
 
 chan.join()
 .receive("ok", (e) => {
-    chan.push("lia", {event_id: "@0", message: {start: "CodeRunner", settings: null}})
+    chan.push("lia", {event_id: "@1", message: {start: "CodeRunner", settings: null}})
     .receive("ok", (e) => {
-        chan.push("lia", {event_id: "@0", message: {files: files}})
+        chan.push("lia", {event_id: "@1", message: {files: files}})
         .receive("ok", (e) => {
-            console.debug(e.message)
-            chan.push("lia", {event_id: "@0", message: {compile: @2, order: order}})
+            if(@0) console.debug(e.message)
+            chan.push("lia", {event_id: "@1", message: {compile: @3, order: order}})
             .receive("ok", (e) => {
-                console.debug(e.message)
-                chan.push("lia", {event_id: "@0", message: {execute: @3}})
+                if(@0) console.debug(e.message)
+                chan.push("lia", {event_id: "@1", message: {execute: @4}})
                 .receive("ok", (e) => {
                     //console.debug(e.message)
                     //console.clear()
@@ -392,25 +418,25 @@ chan.join()
                 })
                 .receive("error", (e) => {
                     console.err("could not start application => ", e)
-                    chan.push("lia", {event_id: "@0", message: {stop: ""}})
+                    chan.push("lia", {event_id: "@1", message: {stop: ""}})
                     send.lia("LIA: stop")
                 })
             })
             .receive("error", (e) => {
                 send.lia(e.message, e.details, false)
-                chan.push("lia", {event_id: "@0", message: {stop: ""}})
+                chan.push("lia", {event_id: "@1", message: {stop: ""}})
                 send.lia("LIA: stop")
             })
         })
         .receive("error", (e) => {
             lia.error("could not setup files => ", e)
-            chan.push("lia", {event_id: "@0", message: {stop: ""}})
+            chan.push("lia", {event_id: "@1", message: {stop: ""}})
             send.lia("LIA: stop")
         })
     })
     .receive("error", (e) => {
         lia.error("could not start service => ", e)
-        chan.push("lia", {event_id: "@0", message: {stop: ""}})
+        chan.push("lia", {event_id: "@1", message: {stop: ""}})
         send.lia("LIA: stop")
     })
 })
@@ -418,10 +444,10 @@ chan.join()
 
 
 send.handle("input", (e) => {
-    chan.push("lia", {event_id: "@0", message: {input: e}})
+    chan.push("lia", {event_id: "@1", message: {input: e}})
 })
 send.handle("stop",  (e) => {
-    chan.push("lia", {event_id: "@0", message: {stop: ""}})
+    chan.push("lia", {event_id: "@1", message: {stop: ""}})
 });
 
 
