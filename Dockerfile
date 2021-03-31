@@ -24,7 +24,7 @@ RUN wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor 
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https \
     && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y dotnet-sdk-3.1
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y dotnet-sdk-5.0
 
 WORKDIR /opt
 RUN wget http://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-10.1.0/gcc-10.1.0.tar.gz \
