@@ -58,6 +58,7 @@ if (order[6])
   files[order[6]] = `@input(6)`
 if (order[7])
   files[order[7]] = `@input(7)`
+
 if (order[8])
   files[order[8]] = `@input(8)`
 if (order[9])
@@ -229,7 +230,44 @@ int main (void){
 ```
 @LIA.eval(`["main.cpp"]`, `g++ main.cpp -o a.out`, `./a.out`)
 
-### C#
+### C# dotnet
+
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Collections;
+using System.Linq;
+using System.Text;
+
+int n;
+Console.Write("Number of primes: ");
+n = int.Parse(Console.ReadLine());
+
+ArrayList primes = new ArrayList();
+primes.Add(2);
+
+for(int i = 3; primes.Count < n; i++) {
+	bool isPrime = true;
+	foreach(int num in primes) isPrime &= i % num != 0;
+	if(isPrime) primes.Add(i);
+}
+
+Console.Write("Primes: ");
+foreach(int prime in primes) Console.Write($" {prime}");
+```
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+</Project>
+
+```
+@LIA.eval(`["Program.cs", "project.csproj"]`, `dotnet build -nologo`, `dotnet run -nologo`)
+
+### C# mono
 
 
 ```csharp
@@ -263,7 +301,6 @@ namespace check1
 }
 ```
 @LIA.eval(`["main.cs"]`, `mono main.cs`, `mono main.exe`)
-
 
 
 ### Python2
@@ -322,11 +359,12 @@ sec. to resurrect.
    1. Login to Heroku: `heroku login` (Don't use sudo or it will not work!)
    2. Create the project: `heroku create [app_name]`
 
-3. Login to Heroku container: `sudo heroku container:login` (It's important
-   that you have docker installed before executing this command.)
+3. Login to Heroku container: `heroku container:login` (It's important
+   that you have docker installed before executing this command
+   and [make sure that your user is added to the docker group](https://docs.docker.com/engine/install/linux-postinstall/).)
 4. Build the docker container and upload it to heroku:
-   `sudo heroku container:push web -a app_name`
-5. Release the docker container: `sudo docker container:release web -a app_name`
+   `heroku container:push web -a app_name`
+5. Release the docker container: `heroku container:release web -a app_name`
 
 Your project url is now `app_name.herokuapp.com`. (Or the auto-generated one
 when you haven't supplied an app name.)
