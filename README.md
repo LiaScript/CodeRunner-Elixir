@@ -25,7 +25,30 @@ var socket = new Socket(ROOT_SOCKET);
 socket.connect(); // connect
 var chan = socket.channel("lia:"+hash);
 
+// eta timer for heroku startup
+send.lia("LIA: terminal")
+send.lia("LIA: stop")
+
+var timer = 30; // seconds
+var connected = false
+
+setInterval(() => {
+  if(!connected) {
+    console.clear();
+    console.log("ETA until execution: " + timer + "s");
+    if(timer > 0) timer--;
+  }
+}, 1000)
+
+// ----
+
 chan.on("service", (e) => {
+  if(!connected) {
+    connected = true;
+    console.clear();
+    send.lia("LIA: terminal")
+  }
+
   if (e.message.stderr)
     console.error(e.message.stderr)
   else if (e.message.stdout) {
@@ -79,7 +102,6 @@ chan.join()
                 .receive("ok", (e) => {
                     //console.debug(e.message)
                     //console.clear()
-                    send.lia("LIA: terminal")
                 })
                 .receive("error", (e) => {
                     console.err("could not start application => ", e)
@@ -118,8 +140,6 @@ send.handle("stop",  (e) => {
 
 "LIA: wait"
 </script>
-
-
 @end
 -->
 
