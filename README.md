@@ -31,15 +31,20 @@ var chan = socket.channel("lia:"+hash);
 send.lia("LIA: terminal")
 send.lia("LIA: stop")
 
-var timer = 60 // seconds
+var timer = 105 // seconds (found by testing)
 var connected = false
 var current_retries = 0
 
 setInterval(() => {
   if(!connected) {
     console.clear();
-    console.log(`ETA until execution: ${timer}s, Retries: ${current_retries}`);
-    if(timer > 0) timer--;
+    if(timer > 0) {
+        timer--;
+        if(timer < 95) console.log(`ETA until execution: ${timer}s, Retries: ${current_retries}`);
+    }
+    else if(timer <= 0) {
+      console.log(`Couldn't reach server in the estimated time. Is your internet connection working?`)
+    }
   }
 }, 1000)
 
@@ -430,15 +435,20 @@ var chan = socket.channel("lia:"+hash);
 send.lia("LIA: terminal")
 send.lia("LIA: stop")
 
-var timer = 60 // seconds
+var timer = 105 // seconds (found by testing)
 var connected = false
 var current_retries = 0
 
 setInterval(() => {
   if(!connected) {
     console.clear();
-    console.log(`ETA until execution: ${timer}s, Retries: ${current_retries}`);
-    if(timer > 0) timer--;
+    if(timer > 0) {
+        timer--;
+        if(timer < 95) console.log(`ETA until execution: ${timer}s, Retries: ${current_retries}`);
+    }
+    else if(timer <= 0) {
+      console.log(`Couldn't reach server in the estimated time. Is your internet connection working?`)
+    }
   }
 }, 1000)
 
