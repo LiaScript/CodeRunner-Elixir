@@ -21,21 +21,24 @@ script:   https://cdn.jsdelivr.net/npm/phoenix-js@1.0.3/dist/glob/main.js
 <script>
 var hash = Math.random().toString(36).replace(/[^a-z]+/g, '')
 var ROOT_SOCKET = 'wss://liarunner.herokuapp.com/socket'; // default path is /socket
-var socket = new Socket(ROOT_SOCKET);
+
+var socket = new Socket(ROOT_SOCKET, { timeout: 30000 });
+
 socket.connect(); // connect
 var chan = socket.channel("lia:"+hash);
 
-// eta timer for heroku startup
+// eta timer and retry counter for heroku startup
 send.lia("LIA: terminal")
 send.lia("LIA: stop")
 
-var timer = 30; // seconds
+var timer = 60 // seconds
 var connected = false
+var current_retries = 0
 
 setInterval(() => {
   if(!connected) {
     console.clear();
-    console.log("ETA until execution: " + timer + "s");
+    console.log(`ETA until execution: ${timer}s, Retries: ${current_retries}`);
     if(timer > 0) timer--;
   }
 }, 1000)
@@ -47,6 +50,7 @@ chan.on("service", (e) => {
     connected = true;
     console.clear();
     send.lia("LIA: terminal")
+    current_retries = 0
   }
 
   if (e.message.stderr)
@@ -61,9 +65,13 @@ chan.on("service", (e) => {
   }
 })
 
+// error hook gets called, when a reconnect is attemted
+socket.onError((e) => {
+  current_retries++
+})
+
 var order = @2
 var files = {}
-
 
 if (order[0])
   files[order[0]] = `@input(0)`
@@ -99,10 +107,7 @@ chan.join()
             .receive("ok", (e) => {
                 if(@0) console.debug(e.message)
                 chan.push("lia", {event_id: "@1", message: {execute: @4}})
-                .receive("ok", (e) => {
-                    //console.debug(e.message)
-                    //console.clear()
-                })
+                .receive("ok", (e) => {})
                 .receive("error", (e) => {
                     console.err("could not start application => ", e)
                     chan.push("lia", {event_id: "@1", message: {stop: ""}})
@@ -415,11 +420,38 @@ script:   https://cdn.jsdelivr.net/npm/phoenix-js@1.0.3/dist/glob/main.js
 <script>
 var hash = Math.random().toString(36).replace(/[^a-z]+/g, '')
 var ROOT_SOCKET = 'wss://liarunner.herokuapp.com/socket'; // default path is /socket
-var socket = new Socket(ROOT_SOCKET);
+
+var socket = new Socket(ROOT_SOCKET, { timeout: 30000 });
+
 socket.connect(); // connect
 var chan = socket.channel("lia:"+hash);
 
+// eta timer and retry counter for heroku startup
+send.lia("LIA: terminal")
+send.lia("LIA: stop")
+
+var timer = 60 // seconds
+var connected = false
+var current_retries = 0
+
+setInterval(() => {
+  if(!connected) {
+    console.clear();
+    console.log(`ETA until execution: ${timer}s, Retries: ${current_retries}`);
+    if(timer > 0) timer--;
+  }
+}, 1000)
+
+// ----
+
 chan.on("service", (e) => {
+  if(!connected) {
+    connected = true;
+    console.clear();
+    send.lia("LIA: terminal")
+    current_retries = 0
+  }
+
   if (e.message.stderr)
     console.error(e.message.stderr)
   else if (e.message.stdout) {
@@ -432,9 +464,13 @@ chan.on("service", (e) => {
   }
 })
 
+// error hook gets called, when a reconnect is attemted
+socket.onError((e) => {
+  current_retries++
+})
+
 var order = @2
 var files = {}
-
 
 if (order[0])
   files[order[0]] = `@input(0)`
@@ -452,6 +488,7 @@ if (order[6])
   files[order[6]] = `@input(6)`
 if (order[7])
   files[order[7]] = `@input(7)`
+
 if (order[8])
   files[order[8]] = `@input(8)`
 if (order[9])
@@ -469,11 +506,7 @@ chan.join()
             .receive("ok", (e) => {
                 if(@0) console.debug(e.message)
                 chan.push("lia", {event_id: "@1", message: {execute: @4}})
-                .receive("ok", (e) => {
-                    //console.debug(e.message)
-                    //console.clear()
-                    send.lia("LIA: terminal")
-                })
+                .receive("ok", (e) => {})
                 .receive("error", (e) => {
                     console.err("could not start application => ", e)
                     chan.push("lia", {event_id: "@1", message: {stop: ""}})
