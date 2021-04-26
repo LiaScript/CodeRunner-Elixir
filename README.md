@@ -27,32 +27,12 @@ var socket = new Socket(ROOT_SOCKET, { timeout: 30000 });
 socket.connect(); // connect
 var chan = socket.channel("lia:"+hash);
 
-// eta timer and retry counter for heroku startup
-var timer = 105 // seconds (found by testing)
 var connected = false
-var current_retries = 0
-
-setInterval(() => {
-  if(!connected) {
-    console.clear();
-    if(timer > 0) {
-        timer--;
-        if(timer < 95) console.debug(`ETA until execution: ${timer}s, Retries: ${current_retries}`);
-    }
-    else if(timer <= 0) {
-      console.err(`Couldn't reach server in the estimated time. Is your internet connection working?`)
-    }
-  }
-}, 1000)
-
-// ----
-
 chan.on("service", (e) => {
   if(!connected) {
     connected = true;
     console.clear();
     send.lia("LIA: terminal")
-    current_retries = 0
   }
 
   if (e.message.stderr)
@@ -428,35 +408,12 @@ var socket = new Socket(ROOT_SOCKET, { timeout: 30000 });
 socket.connect(); // connect
 var chan = socket.channel("lia:"+hash);
 
-// eta timer and retry counter for heroku startup
-send.lia("LIA: terminal")
-send.lia("LIA: stop")
-
-var timer = 105 // seconds (found by testing)
 var connected = false
-var current_retries = 0
-
-setInterval(() => {
-  if(!connected) {
-    console.clear();
-    if(timer > 0) {
-        timer--;
-        if(timer < 95) console.log(`ETA until execution: ${timer}s, Retries: ${current_retries}`);
-    }
-    else if(timer <= 0) {
-      console.log(`Couldn't reach server in the estimated time. Is your internet connection working?`)
-    }
-  }
-}, 1000)
-
-// ----
-
 chan.on("service", (e) => {
   if(!connected) {
     connected = true;
     console.clear();
     send.lia("LIA: terminal")
-    current_retries = 0
   }
 
   if (e.message.stderr)
@@ -554,4 +511,5 @@ send.handle("stop",  (e) => {
 
 
 @end
+-->
 ```
