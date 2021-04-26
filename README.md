@@ -22,7 +22,12 @@ script:   https://cdn.jsdelivr.net/npm/phoenix-js@1.0.3/dist/glob/main.js
 var hash = Math.random().toString(36).replace(/[^a-z]+/g, '')
 var ROOT_SOCKET = 'wss://liarunner.herokuapp.com/socket'; // default path is /socket
 
-var socket = new Socket(ROOT_SOCKET, { timeout: 30000 });
+var socket = new Socket(ROOT_SOCKET,
+  { timeout: 30000,
+  logger: function(kind, msg, data) {
+      window.console.log(`${kind}: ${msg}`, data)
+    }
+  });
 
 socket.connect(); // connect
 var chan = socket.channel("lia:"+hash);
@@ -39,7 +44,7 @@ chan.on("service", (e) => {
     console.error(e.message.stderr)
   else if (e.message.stdout) {
     if (!e.message.stdout.startsWith("Warning: cannot switch "))
-      console.log(e.message.stdout)
+      console.stream(e.message.stdout)
   }
   else if (e.message.exit) {
     if(@0) console.debug(e.message.exit)
@@ -420,7 +425,7 @@ chan.on("service", (e) => {
     console.error(e.message.stderr)
   else if (e.message.stdout) {
     if (!e.message.stdout.startsWith("Warning: cannot switch "))
-      console.log(e.message.stdout)
+      console.stream(e.message.stdout)
   }
   else if (e.message.exit) {
     if(@0) console.debug(e.message.exit)
