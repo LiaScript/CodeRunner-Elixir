@@ -314,6 +314,18 @@ namespace check1
 ```
 @LIA.eval(`["main.cs"]`, `mono main.cs`, `mono main.exe`)
 
+### Go
+
+``` go
+package main
+
+import "fmt"
+
+func main() {
+  fmt.Println("hello world")
+}
+```
+@LIA.eval(`["main.go"]`, `go build main.go`, `./main`)
 
 ### Python2
 
@@ -333,6 +345,15 @@ for i in range(10):
   print("Hallo Welt", i)
 ```
 @LIA.eval(`["main.py"]`, `python3 -m compileall .`, `python3 main.py`)
+
+### Rust
+
+``` go
+fn main() {
+  println!("Hello World!");
+}
+```
+@LIA.eval(`["hello.rs"]`, `rustc hello.rs`, `./hello`)
 
 ## `@LIA.evalWithDebug`
 
