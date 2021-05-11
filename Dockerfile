@@ -12,7 +12,7 @@ RUN npm install -g --save-dev webpack webpack-cli \
 
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y python3.5 mono-complete mono-mcs unzip golang-go
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y python3.5 mono-complete mono-mcs unzip golang-go rustc
 
 
 RUN wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg \

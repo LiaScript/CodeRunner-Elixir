@@ -122,6 +122,9 @@ defmodule CodeRunner.Agent do
       ["dotnet" | args] ->
         Comp.DotNet.compile(args, config.path)
 
+      ["rustc" | args] ->
+        Comp.Rust.compile(args, config.path)
+
       [comp | _args] ->
         {:error, "Compiler not found: #{comp}", []}
     end
