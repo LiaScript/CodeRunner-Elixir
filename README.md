@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    LiaScript@github.io
 
-version:  0.0.2
+version:  0.0.3
 
 language: en
 
@@ -396,7 +396,11 @@ sec. to resurrect.
    that you have docker installed before executing this command
    and [make sure that your user is added to the docker group](https://docs.docker.com/engine/install/linux-postinstall/).)
 4. Build the docker container and upload it to heroku:
+
+   `docker build . -t web`
+
    `heroku container:push web -a app_name`
+
 5. Release the docker container: `heroku container:release web -a app_name`
 
 Your project url is now `app_name.herokuapp.com`. (Or the auto-generated one
