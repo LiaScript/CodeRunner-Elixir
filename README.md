@@ -37,14 +37,11 @@ let current_retries = 0;
 const timer = (() => {
   let counter = 105; // seconds (found by testing)
 
-  send.lia("LIA: terminal")
-  send.lia("LIA: stop")
-
   const timerHandle = setInterval(() => {
-    console.clear();
     if(counter > 0) {
+        if (counter == 105) console.info("starting the process");
         counter--;
-        if(counter < 95) console.log(`ETA until execution: ${counter}s, Retries: ${current_retries}`);
+        if(counter < 95 && counter % 2 == 0) console.stream(".");
     }
     else if(counter <= 0) {
       console.log(`Couldn't reach server in the estimated time. Is your internet connection working?`)
@@ -308,7 +305,6 @@ foreach(int prime in primes) Console.Write($" {prime}");
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 </Project>
-
 ```
 @LIA.eval(`["Program.cs", "project.csproj"]`, `dotnet build -nologo`, `dotnet run -nologo`)
 
