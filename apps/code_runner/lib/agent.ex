@@ -104,6 +104,9 @@ defmodule CodeRunner.Agent do
       ["g++" | args] ->
         Comp.Gpp.compile(args, config.path)
 
+      ["go" | args] ->
+        Comp.Go.compile(args, config.path)
+
       ["javac" | args] ->
         Comp.Java.compile(args, config.path)
 
