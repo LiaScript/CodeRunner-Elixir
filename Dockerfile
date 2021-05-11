@@ -11,9 +11,21 @@ RUN npm install -g --save-dev webpack webpack-cli \
     && npm update
 
 RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y python3.5 mono-complete mono-mcs unzip golang-go rustc
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y firejail \
+    && chown root:root /usr/bin/firejail \
+    && chmod u+s /usr/bin/firejail
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y unzip
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y python3.5
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y mono-complete mono-mcs
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y golang-go
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y rustc
 
 RUN wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg \
     && mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/ \
@@ -36,10 +48,6 @@ RUN wget http://ftp.mirrorservice.org/sites/sourceware.org/pub/gcc/releases/gcc-
     && make install \
     && cd .. \
     && rm -rf gcc-10.1.0
-
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y firejail \
-    && chown root:root /usr/bin/firejail \
-    && chmod u+s /usr/bin/firejail
 
 ADD . /berlin
 
