@@ -26,20 +26,44 @@ var socket = new Socket(ROOT_SOCKET,
   { timeout: 30000,
   logger: function(kind, msg, data) {
       window.console.log(`${kind}: ${msg}`, data)
-    }
-  });
+  }
+});
 
 socket.connect(); // connect
 var chan = socket.channel("lia:"+hash);
 
-var connected = false
-chan.on("service", (e) => {
-  if(!connected) {
-    connected = true;
-    console.clear();
-    send.lia("LIA: terminal")
-  }
+let current_retries = 0;
 
+const timer = (() => {
+  let counter = 105; // seconds (found by testing)
+
+  send.lia("LIA: terminal")
+  send.lia("LIA: stop")
+
+  const timerHandle = setInterval(() => {
+    console.clear();
+    if(counter > 0) {
+        counter--;
+        if(counter < 95) console.log(`ETA until execution: ${counter}s, Retries: ${current_retries}`);
+    }
+    else if(counter <= 0) {
+      console.log(`Couldn't reach server in the estimated time. Is your internet connection working?`)
+    }
+  }, 1000);
+
+  const stop = () => {
+    clearInterval(timerHandle);
+    console.clear();
+  };
+
+  const timer = {
+    stop: stop
+  };
+
+  return timer;
+})();
+
+chan.on("service", (e) => {
   if (e.message.stderr)
     console.error(e.message.stderr)
   else if (e.message.stdout) {
@@ -76,7 +100,6 @@ if (order[6])
   files[order[6]] = `@input(6)`
 if (order[7])
   files[order[7]] = `@input(7)`
-
 if (order[8])
   files[order[8]] = `@input(8)`
 if (order[9])
@@ -94,32 +117,42 @@ chan.join()
             .receive("ok", (e) => {
                 if(@0) console.debug(e.message)
                 chan.push("lia", {event_id: "@1", message: {execute: @4}})
-                .receive("ok", (e) => {})
+                .receive("ok", (e) => {
+                    timer.stop();
+                    send.lia("LIA: terminal")
+                })
                 .receive("error", (e) => {
+                    timer.stop();
                     console.err("could not start application => ", e)
                     chan.push("lia", {event_id: "@1", message: {stop: ""}})
                     send.lia("LIA: stop")
                 })
             })
             .receive("error", (e) => {
+                timer.stop();
                 send.lia(e.message, e.details, false)
                 chan.push("lia", {event_id: "@1", message: {stop: ""}})
                 send.lia("LIA: stop")
             })
         })
         .receive("error", (e) => {
+            timer.stop();
             lia.error("could not setup files => ", e)
             chan.push("lia", {event_id: "@1", message: {stop: ""}})
             send.lia("LIA: stop")
         })
     })
     .receive("error", (e) => {
+        timer.stop();
         lia.error("could not start service => ", e)
         chan.push("lia", {event_id: "@1", message: {stop: ""}})
         send.lia("LIA: stop")
     })
 })
-.receive("error", (e) => { lia.error("channel join => ", e); });
+.receive("error", (e) => {
+  timer.stop();
+  lia.error("channel join => ", e);
+});
 
 
 send.handle("input", (e) => {
@@ -433,19 +466,48 @@ script:   https://cdn.jsdelivr.net/npm/phoenix-js@1.0.3/dist/glob/main.js
 var hash = Math.random().toString(36).replace(/[^a-z]+/g, '')
 var ROOT_SOCKET = 'wss://liarunner.herokuapp.com/socket'; // default path is /socket
 
-var socket = new Socket(ROOT_SOCKET, { timeout: 30000 });
+var socket = new Socket(ROOT_SOCKET,
+  { timeout: 30000,
+  logger: function(kind, msg, data) {
+      window.console.log(`${kind}: ${msg}`, data)
+  }
+});
 
 socket.connect(); // connect
 var chan = socket.channel("lia:"+hash);
 
-var connected = false
-chan.on("service", (e) => {
-  if(!connected) {
-    connected = true;
-    console.clear();
-    send.lia("LIA: terminal")
-  }
+let current_retries = 0;
 
+const timer = (() => {
+  let counter = 105; // seconds (found by testing)
+
+  send.lia("LIA: terminal")
+  send.lia("LIA: stop")
+
+  const timerHandle = setInterval(() => {
+    console.clear();
+    if(counter > 0) {
+        counter--;
+        if(counter < 95) console.log(`ETA until execution: ${counter}s, Retries: ${current_retries}`);
+    }
+    else if(counter <= 0) {
+      console.log(`Couldn't reach server in the estimated time. Is your internet connection working?`)
+    }
+  }, 1000);
+
+  const stop = () => {
+    clearInterval(timerHandle);
+    console.clear();
+  };
+
+  const timer = {
+    stop: stop
+  };
+
+  return timer;
+})();
+
+chan.on("service", (e) => {
   if (e.message.stderr)
     console.error(e.message.stderr)
   else if (e.message.stdout) {
@@ -482,7 +544,6 @@ if (order[6])
   files[order[6]] = `@input(6)`
 if (order[7])
   files[order[7]] = `@input(7)`
-
 if (order[8])
   files[order[8]] = `@input(8)`
 if (order[9])
@@ -500,32 +561,42 @@ chan.join()
             .receive("ok", (e) => {
                 if(@0) console.debug(e.message)
                 chan.push("lia", {event_id: "@1", message: {execute: @4}})
-                .receive("ok", (e) => {})
+                .receive("ok", (e) => {
+                    timer.stop();
+                    send.lia("LIA: terminal")
+                })
                 .receive("error", (e) => {
+                    timer.stop();
                     console.err("could not start application => ", e)
                     chan.push("lia", {event_id: "@1", message: {stop: ""}})
                     send.lia("LIA: stop")
                 })
             })
             .receive("error", (e) => {
+                timer.stop();
                 send.lia(e.message, e.details, false)
                 chan.push("lia", {event_id: "@1", message: {stop: ""}})
                 send.lia("LIA: stop")
             })
         })
         .receive("error", (e) => {
+            timer.stop();
             lia.error("could not setup files => ", e)
             chan.push("lia", {event_id: "@1", message: {stop: ""}})
             send.lia("LIA: stop")
         })
     })
     .receive("error", (e) => {
+        timer.stop();
         lia.error("could not start service => ", e)
         chan.push("lia", {event_id: "@1", message: {stop: ""}})
         send.lia("LIA: stop")
     })
 })
-.receive("error", (e) => { lia.error("channel join => ", e); });
+.receive("error", (e) => {
+  timer.stop();
+  lia.error("channel join => ", e);
+});
 
 
 send.handle("input", (e) => {
