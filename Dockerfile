@@ -27,6 +27,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y golang-go
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y rustc
 
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y default-jdk
+
 RUN wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg \
     && mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/ \
     && wget https://packages.microsoft.com/config/debian/9/prod.list \

@@ -3,7 +3,7 @@ author:   André Dietrich
 
 email:    LiaScript@github.io
 
-version:  0.0.4
+version:  0.0.5
 
 language: en
 
@@ -355,6 +355,32 @@ func main() {
 }
 ```
 @LIA.eval(`["main.go"]`, `go build main.go`, `./main`)
+
+
+### Java
+
+``` java
+import java.io.*;
+class Demo {
+public static void main(String args[])
+throws IOException
+{
+  // create a BufferedReader using System.in
+  BufferedReader obj = new BufferedReader(new InputStreamReader(System.in));
+   String str;
+
+ System.out.println("Enter lines of text.");
+ System.out.println("Enter 'stop' to quit.");
+   do {
+
+    str = obj.readLine();
+    System.err.println(str);
+  }   while(!str.equals("stop"));
+}
+}
+```
+@LIA.eval(`["Demo.java"]`, `javac Demo.java`, `java Demo`)
+
 
 ### Python2
 
