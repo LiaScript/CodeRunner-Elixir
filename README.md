@@ -20,7 +20,9 @@ script:   https://cdn.jsdelivr.net/npm/phoenix-js@1.0.3/dist/glob/main.js
 @LIA.eval_
 <script>
 var hash = Math.random().toString(36).replace(/[^a-z]+/g, '')
-var ROOT_SOCKET = 'wss://liarunner.herokuapp.com/socket'; // default path is /socket
+//var ROOT_SOCKET = 'wss://liarunner.herokuapp.com/socket'; // default path is /socket
+var ROOT_SOCKET = 'ws://localhost:4000/socket'; // default path is /socket
+
 
 var socket = new Socket(ROOT_SOCKET,
   { timeout: 30000,
@@ -400,6 +402,15 @@ for i in range(10):
   print("Hallo Welt", i)
 ```
 @LIA.eval(`["main.py"]`, `python3 -m compileall .`, `python3 main.py`)
+
+
+### R
+
+``` go
+print("Hello World")
+```
+@LIA.eval(`["main.R"]`, `none`, `Rscript main.R`)
+
 
 ### Rust
 
