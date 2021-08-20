@@ -58,4 +58,37 @@ defmodule CodeRunner.Project do
 
   def path(folder, base),
     do: base <> "/" <> folder
+
+
+  def isImage(filename) do
+    String.ends_with?(filename, ".png")
+    || String.ends_with?(filename, ".bmp")
+    || String.ends_with?(filename, ".jpg")
+    || String.ends_with?(filename, ".git")
+    || String.ends_with?(filename, ".tif")
+    || String.ends_with?(filename, ".svg")
+  end
+
+  def findImages(folder, base) do
+    dir = path(folder, base)
+
+    dir
+    |> File.ls!
+    |> Enum.filter(&(isImage(&1)))
+    |> Enum.map(&{&1, File.stat!(dir <> &1).ctime})
+    |> Enum.sort(fn {_, time1}, {_, time2} -> time1 <= time2 end)
+    |> Enum.map(fn {file, _} ->
+        filename = dir <> "/" <> file
+
+        %{:file => file,
+          :data =>
+          "data:image/" <> Path.extname(file)  <> ";base64," <>
+          (filename
+            |>File.read!
+            |> Base.encode64
+          )}
+       end)
+  end
+
+
 end

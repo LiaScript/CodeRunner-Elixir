@@ -32,7 +32,12 @@ defmodule CodeRunner.Agent do
   def stop(pid) do
     conf = get_plug(pid)
 
-    IO.inspect(conf.port)
+    case Project.findImages("", conf.path) do
+      [] -> []
+
+      images ->
+        send(conf.other_pid, {:data, %{message: %{images: images}, event_id: conf.event_id}})
+    end
 
     # Port.info(conf.port)
     if is_port(conf.port) do
