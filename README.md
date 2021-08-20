@@ -73,6 +73,12 @@ chan.on("service", (e) => {
     if(@0) console.debug(e.message.exit)
     send.lia("LIA: stop")
   }
+  else if (e.message.images) {
+    for(let i = 0; i < e.message.images.length; i++) {
+      console.html("<hr/>")
+      console.html("<img src='" + e.message.images[i].data + "' onclick='window.img_Click(\"" + e.message.images[i].data + "\")'>")
+    }
+  }
 })
 
 // error hook gets called, when a reconnect is attemted
@@ -406,11 +412,27 @@ for i in range(10):
 
 ### R
 
-``` go
+``` R
 print("Hello World")
 ```
 @LIA.eval(`["main.R"]`, `none`, `Rscript main.R`)
 
+
+``` R
+library(ggplot2)
+
+# Use stdout as per normal...
+print("Hello, world!")
+
+# Use plots...
+png(file="out1.png")
+plot(cars)
+
+# Even ggplot!
+png(file="out2.png")
+qplot(wt, mpg, data = mtcars, colour = factor(cyl))
+```
+@LIA.eval(`["main.R"]`, `none`, `Rscript main.R`)
 
 ### Rust
 
