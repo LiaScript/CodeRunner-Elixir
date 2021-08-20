@@ -125,7 +125,7 @@ defmodule CodeRunner.Agent do
       ["rustc" | args] ->
         Comp.Rust.compile(args, config.path)
 
-      ["none" | args] ->
+      ["none" | _] ->
         {:ok, "", []}
 
       [comp | _args] ->
