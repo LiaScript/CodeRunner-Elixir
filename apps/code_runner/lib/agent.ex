@@ -125,6 +125,9 @@ defmodule CodeRunner.Agent do
       ["rustc" | args] ->
         Comp.Rust.compile(args, config.path)
 
+      ["none" | args] ->
+        {:ok, "", []}
+
       [comp | _args] ->
         {:error, "Compiler not found: #{comp}", []}
     end
@@ -141,7 +144,7 @@ defmodule CodeRunner.Agent do
         [:binary, :stderr_to_stdout, cd: config.path, parallelism: true]
       )
 
-    mediator = spawn(fn -> port_monitor(port, event_id, config.other_pid) end)
+    mediator = spawn(fn -> port_monitor(pid, port, event_id, config.other_pid) end)
 
     Port.connect(port, mediator)
 
@@ -174,24 +177,27 @@ defmodule CodeRunner.Agent do
     :ok
   end
 
-  defp port_monitor(port, event_id, other_pid) do
+  defp port_monitor(pid, port, event_id, other_pid) do
     Port.monitor(port)
-    running(event_id, other_pid)
+    running(pid, event_id, other_pid)
   end
 
-  defp running(event_id, other_pid) do
+  defp running(pid, event_id, other_pid) do
     receive do
       {_port, {:data, msg}} ->
         Logger.debug("receive #{event_id}: #{msg}")
         send(other_pid, {:data, %{message: %{stdout: msg}, event_id: event_id}})
-        running(event_id, other_pid)
+        running(pid, event_id, other_pid)
 
       {:DOWN, _, _, _, _} ->
         Logger.debug(":DOWN #{event_id}")
+
         send(other_pid, {:data, %{message: %{exit: "process terminated\n"}, event_id: event_id}})
 
+        stop(pid)
       msg ->
         Logger.error("unknown message (#{event_id}): #{Kernel.inspect(msg)}}")
+        running(pid, event_id, other_pid)
     end
   end
 
