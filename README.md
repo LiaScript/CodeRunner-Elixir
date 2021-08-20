@@ -20,8 +20,8 @@ script:   https://cdn.jsdelivr.net/npm/phoenix-js@1.0.3/dist/glob/main.js
 @LIA.eval_
 <script>
 var hash = Math.random().toString(36).replace(/[^a-z]+/g, '')
-//var ROOT_SOCKET = 'wss://liarunner.herokuapp.com/socket'; // default path is /socket
-var ROOT_SOCKET = 'ws://localhost:4000/socket'; // default path is /socket
+var ROOT_SOCKET = 'wss://liarunner.herokuapp.com/socket'; // default path is /socket
+//var ROOT_SOCKET = 'ws://localhost:4000/socket'; // default path is /socket
 
 
 var socket = new Socket(ROOT_SOCKET,
