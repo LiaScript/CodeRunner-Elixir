@@ -39,7 +39,7 @@ const timer = (() => {
 
   const timerHandle = setInterval(() => {
     if(counter > 0) {
-        if (counter == 105) console.info("starting the process");
+        if (counter == 105) console.debug("starting the process");
         counter--;
         if(counter < 95 && counter % 2 == 0) console.stream(".");
     }
