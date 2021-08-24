@@ -370,7 +370,7 @@ func main() {
 ``` haskell
 main = putStrLn "hello world"
 ```
-@LIA.eval(`["main.hs"]`, `ghc main.hs -o`, `./main`)
+@LIA.eval(`["main.hs"]`, `ghc main.hs -o main`, `./main`)
 
 ### Java
 
