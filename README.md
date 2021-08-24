@@ -365,6 +365,13 @@ func main() {
 @LIA.eval(`["main.go"]`, `go build main.go`, `./main`)
 
 
+### Haskell
+
+``` haskell
+main = putStrLn "hello world"
+```
+@LIA.eval(`["main.hs"]`, `ghc main.hs -o`, `./main`)
+
 ### Java
 
 ``` java

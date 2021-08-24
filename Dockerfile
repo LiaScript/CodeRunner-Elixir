@@ -77,6 +77,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y r-base r-base-dev r-recomm
     r-cran-xts \ 
     r-cran-zoo
 
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y ghc
+
 ADD . /berlin
 
 WORKDIR /berlin

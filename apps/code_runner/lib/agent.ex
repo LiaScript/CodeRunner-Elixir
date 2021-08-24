@@ -130,6 +130,9 @@ defmodule CodeRunner.Agent do
       ["rustc" | args] ->
         Comp.Rust.compile(args, config.path)
 
+      ["ghc" | args] ->
+        Comp.Ghc.compile(args, config.path)
+
       ["none" | _] ->
         {:ok, "", []}
 
